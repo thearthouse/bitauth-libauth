@@ -34,14 +34,15 @@ function getrandbits(k) {
       var key = 2;
       var ddd;
       var hexb;
+      var bsize = 10000;
       for (let i = 1; i < dr; i++) {
       //b=ecc.pointAdd(b,G);
         /* var c = bits_randint(BigInt(1546165),BigInt(15461655616516561654613666666666666566666666666666516)).toString(16).padStart(64, '0'); */
   /*     priv = Buffer.from(c,'hex');
       b=secp256k1.derivePublicKeyCompressed(priv); */
-      d = secp256k1.deriveBatchPublicKeyUncompressed(b,G);
+      d = secp256k1.BatchPublicKeyUncompressed(b,G);
       
-      for (let sat = 0; sat < 50000; sat++) {
+      for (let sat = 0; sat < bsize; sat++) {
         ddd =  d.slice((sat*65),(sat*65)+65);
         hexb = Buffer.from(ddd).toString('hex');
         if(find==hexb){
@@ -51,7 +52,7 @@ function getrandbits(k) {
         key += 1;
       }
       b = ddd;
-      cdn += 50000;
+      cdn += bsize;
       if ((cdn%10000000)==0){
         var unixx = Math.round(+new Date()/1000);
       console.log(cdn/(unixx-unix));

@@ -751,7 +751,7 @@ bigole_scratch* demo_create(const secp256k1_context* ctx, const size_t size) {
 
 
 
-size_t key_count = 1;
+size_t key_count = 0;
 bigole_scratch *scr;
 
 int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned char *pubkeys, const secp256k1_pubkey *pubkeyone, const secp256k1_pubkey *pubkeytwo) {
@@ -759,9 +759,9 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
     secp256k1_ge Q;
     secp256k1_ge Q2;
     secp256k1_ge ge_pubkey;
-    if(2>key_count){
+    if(1>key_count){
         /* printf("erde\n"); */
-        key_count = 50000;
+        key_count = 10000;
         scr = demo_create(ctx, key_count);
     }
     size_t i, dummy, out_keys;

@@ -22,13 +22,13 @@ sudo npm install -g grunt-cli
 npm start @bitauth/libauth
 
 
-node /workspace/solominer/a.js
-node b.js
-yarn --check-files
-yarn bench
 
+yarn --check-files
+
+rm -rf build && yarn bench
 npm run compile:secp256k1
 
-node /workspace/solominer/b.js
+npm run compile:secp256k1 && rm -rf build && yarn bench
 
-node /workspace/solominer/v.js
+node /workspace/bitauth-libauth/v.js
+
