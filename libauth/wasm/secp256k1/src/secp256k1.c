@@ -760,7 +760,6 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
     secp256k1_ge Q2;
     secp256k1_ge ge_pubkey;
     if(1>key_count){
-        /* printf("erde\n"); */
         key_count = 10000;
         scr = demo_create(ctx, key_count);
     }
@@ -779,13 +778,12 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
         out_keys++;
         
     }
-    /* printf("borlo\n"); */
+
     if ( out_keys > 0 ) {
         /* Invert all Jacobian public keys' Z values in one go. */
         secp256k1_fe_inv_all_var(scr->fe_out, scr->fe_in, out_keys);
     }
     out_keys = 0;
-    /* printf("korlo\n"); */
     for ( i = 0; i < key_count; i++) {
         secp256k1_ge_set_gej_zinv(&ge_pubkey, &(scr->gej[i]), &(scr->fe_out[out_keys]));
 

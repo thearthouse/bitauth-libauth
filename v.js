@@ -46,7 +46,7 @@ function getrandbits(k) {
         ddd =  d.slice((sat*65),(sat*65)+65);
         hexb = Buffer.from(ddd).toString('hex');
         if(find==hexb){
-            console.log(hexb+" "+(BigInt(key)==c)+" "+key);
+            console.log(hexb+" "+(BigInt(key)==c)+" "+key+"  "+d.length/65);
             throw 'key found!';
         }
         key += 1;
