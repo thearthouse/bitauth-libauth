@@ -1,0 +1,34 @@
+node /mnt/c/Users/mrgum/Downloads/84651/a.js
+
+yarn --check-files
+yarn bench
+
+npm run compile:secp256k1
+
+
+
+
+make distclean
+
+
+git clone --recursive https://github.com/bitauth/libauth.git
+git clone -b feature/publicKey_combine --recursive https://github.com/ArvsIndrarys/bitcoin-ts.git
+cd libauth
+
+npm install -g yarn
+sudo npm -g install --force --save
+npm audit fix --force
+sudo npm install -g grunt-cli
+npm start @bitauth/libauth
+
+
+node /workspace/solominer/a.js
+node b.js
+yarn --check-files
+yarn bench
+
+npm run compile:secp256k1
+
+node /workspace/solominer/b.js
+
+node /workspace/solominer/v.js
