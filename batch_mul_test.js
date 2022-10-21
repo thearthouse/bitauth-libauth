@@ -38,7 +38,7 @@ function getrandbits(k) {
       const privdata = {};
       for (let i = 1; i < dr; i++) {
           for (let h = 0; h < bsize; h++) {
-            privdata[h]=bits_randint(BigInt(1),BigInt(2500000));
+            privdata[h]=bits_randint(BigInt(1),BigInt(250000000));
             privbuf.set(Buffer.from(privdata[h].toString(16).padStart(64, '0'),'hex'), h*32);
           }
           d = secp256k1.BatchKeyMullUncompressed(privbuf);
@@ -52,7 +52,7 @@ function getrandbits(k) {
         }
       }
       cdn += bsize;
-      if ((cdn%500000)==0){
+      if ((cdn%1500000)==0){
         var unixx = Math.round(+new Date()/1000);
       console.log(cdn/(unixx-unix));
       //console.log(Buffer.from(d.slice(0,65)).toString('hex'));

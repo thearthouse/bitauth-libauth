@@ -29,6 +29,7 @@ RUN emcc src/libsecp256k1_la-secp256k1.o \
   -s WASM=1 \
   -s "BINARYEN_METHOD='native-wasm'" \
   -s NO_EXIT_RUNTIME=1 \
+  -s MAXIMUM_MEMORY=429490176 \
   -s ALLOW_MEMORY_GROWTH=1 \
   -s DETERMINISTIC=1 \
   -s EXPORTED_FUNCTIONS='[ \
