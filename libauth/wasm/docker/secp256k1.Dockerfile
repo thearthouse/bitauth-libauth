@@ -45,6 +45,7 @@ RUN emcc src/libsecp256k1_la-secp256k1.o \
   "_secp256k1_ec_pubkey_tweak_add", \
   "_secp256k1_ec_pubkey_tweak_mul", \
   "_secp256k1_ec_pubkey_pub_add_batch", \
+  "_secp256k1_ec_mul_batch", \
   "_secp256k1_ecdsa_recover", \
   "_secp256k1_ecdsa_recoverable_signature_serialize_compact", \
   "_secp256k1_ecdsa_recoverable_signature_parse_compact", \

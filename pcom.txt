@@ -32,3 +32,7 @@ npm run compile:secp256k1 && rm -rf build && yarn bench
 
 node /workspace/bitauth-libauth/v.js
 
+node /workspace/bitauth-libauth/batch_mul_test.js
+
+node /workspace/bitauth-libauth/mul_test.js
+

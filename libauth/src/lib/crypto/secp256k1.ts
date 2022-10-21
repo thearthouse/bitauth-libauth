@@ -24,7 +24,8 @@ const enum ByteLength {
   recoverableSig = 65,
   schnorrSig = 64,
   uncompressedPublicKey = 65,
-  batchuncompressedPublicKey = 650000,
+  batchuncompressedPublicKey = 6500000,
+  batchprivateKey = 3200000,
 }
 
 /**
@@ -62,7 +63,7 @@ const wrapSecp256k1Wasm = (
   const publicKeyScratchT = secp256k1Wasm.malloc(ByteLength.internalPublicKey);
   
   const batchreturn = secp256k1Wasm.malloc(ByteLength.batchuncompressedPublicKey);
-  
+  const batchprivateKeyPtr = secp256k1Wasm.malloc(ByteLength.batchprivateKey);
   
   const messageHashScratch = secp256k1Wasm.malloc(ByteLength.messageHash);
   const internalPublicKeyPtr = secp256k1Wasm.malloc(
@@ -577,13 +578,31 @@ const wrapSecp256k1Wasm = (
         publicKeyScratchT
       ) !== 1
     ) {
-      throw new Error('Adding failed');
+      throw new Error('batch Adding failed');
     }
       return secp256k1Wasm
         .readHeapU8(batchreturn, ByteLength.batchuncompressedPublicKey)
         .slice();
   };
 
+
+  const derivebatchPublicKeymull = () => (
+    privateKeybatch: Uint8Array
+  ) => {
+      secp256k1Wasm.heapU8.set(privateKeybatch, batchprivateKeyPtr);
+    if (
+      secp256k1Wasm.batchpubkeymull(
+        contextPtr,
+        batchreturn,
+        batchprivateKeyPtr
+      ) !== 1
+    ) {
+      throw new Error('batch mull failed');
+    }
+      return secp256k1Wasm
+        .readHeapU8(batchreturn, ByteLength.batchuncompressedPublicKey)
+        .slice();
+  };
 
 
 
@@ -642,6 +661,7 @@ const wrapSecp256k1Wasm = (
     compressPublicKey: convertPublicKey(true),
     derivePublicKeyCompressed: derivePublicKey(true),
     BatchPublicKeyUncompressed: derivebatchPublicKey(),
+    BatchKeyMullUncompressed: derivebatchPublicKeymull(),
     derivePublicKeyUncompressed: derivePublicKey(false),
     malleateSignatureCompact: modifySignature(false, false),
     malleateSignatureDER: modifySignature(true, false),

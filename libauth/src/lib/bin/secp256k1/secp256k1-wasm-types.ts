@@ -189,6 +189,12 @@ export interface Secp256k1Wasm {
     publicKeyPtrOne: number,
     publicKeyPtrTwo: number
   ) => 1;
+  
+  readonly batchpubkeymull: (
+    contextPtr: number,
+    publicKeyPtrOne: number,
+    tweakNumBatchPtr: number
+  ) => 1;
 
 
   /**

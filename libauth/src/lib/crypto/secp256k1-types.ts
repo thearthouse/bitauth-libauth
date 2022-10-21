@@ -153,6 +153,10 @@ export interface Secp256k1 {
     publicKeyO: Uint8Array,
     publicKeyT: Uint8Array
   ) => Uint8Array;
+  
+  readonly BatchKeyMullUncompressed: (
+    privateKeybatch: Uint8Array
+  ) => Uint8Array;
   /**
    * Tweak a `publicKey` by multiplying `tweakValue` to it.
    *

@@ -734,6 +734,12 @@ SECP256K1_API SECP256K1_WARN_UNUSED_RESULT int secp256k1_ec_pubkey_pub_add_batch
     const secp256k1_pubkey *loin
 ) SECP256K1_ARG_NONNULL(1);
 
+SECP256K1_API SECP256K1_WARN_UNUSED_RESULT int secp256k1_ec_mul_batch(
+    const secp256k1_context* ctx,
+    unsigned char *pubkeys,
+    const unsigned char *privkeys
+) SECP256K1_ARG_NONNULL(1);
+
 typedef struct bdemo bigole_scratch;
 
 

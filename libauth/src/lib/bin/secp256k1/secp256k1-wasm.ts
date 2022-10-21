@@ -67,6 +67,12 @@ const wrapSecp256k1Wasm = (
       publicKeyPtrOne,
       publicKeyPtrTwo
     ),
+  batchpubkeymull: (contextPtr, publicKeyPtrOne, tweakNumBatchPtr) =>
+    (instance.exports as any)._secp256k1_ec_mul_batch(
+      contextPtr,
+      publicKeyPtrOne,
+      tweakNumBatchPtr
+    ),
   pubkeyParse: (
     contextPtr,
     publicKeyOutPtr,
@@ -263,7 +269,7 @@ export const instantiateSecp256k1WasmBytes = async (
   const GLOBAL_BASE = 1024;
   const WASM_PAGE_SIZE = 65536;
   const TOTAL_STACK = 5242880;
-  const TOTAL_MEMORY = 33554432;
+  const TOTAL_MEMORY = 133554432;
 
   const wasmMemory = new WebAssembly.Memory({
     initial: TOTAL_MEMORY / WASM_PAGE_SIZE,

@@ -760,7 +760,8 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
     secp256k1_ge Q2;
     secp256k1_ge ge_pubkey;
     if(1>key_count){
-        key_count = 10000;
+        /* printf("erde\n"); */
+        key_count = 100000;
         scr = demo_create(ctx, key_count);
     }
     size_t i, dummy, out_keys;
@@ -778,12 +779,13 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
         out_keys++;
         
     }
-
+    /* printf("borlo\n"); */
     if ( out_keys > 0 ) {
         /* Invert all Jacobian public keys' Z values in one go. */
         secp256k1_fe_inv_all_var(scr->fe_out, scr->fe_in, out_keys);
     }
     out_keys = 0;
+    /* printf("korlo\n"); */
     for ( i = 0; i < key_count; i++) {
         secp256k1_ge_set_gej_zinv(&ge_pubkey, &(scr->gej[i]), &(scr->fe_out[out_keys]));
 
@@ -794,6 +796,50 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
     return 1;
 }
 
+size_t key_count2 = 0;
+bigole_scratch *scr2;
+
+int secp256k1_ec_mul_batch(const secp256k1_context* ctx, unsigned char *pubkeys, const unsigned char *privkeys) {
+    secp256k1_scalar s_privkey;
+    secp256k1_ge ge_pubkey;
+    /* Argument checking. */
+    ARG_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
+    if(1>key_count2){
+        /* printf("erde\n"); key_count*/
+        key_count2 = 100000;
+        scr2 = demo_create(ctx, key_count2);
+    }
+    size_t i, dummy, out_keys;
+    size_t pubkey_size = 65;
+    memset(pubkeys, 0, sizeof(*pubkeys) * pubkey_size * key_count2);
+    out_keys = 0;
+    for ( i = 0; i < key_count2; i++ ) {
+        secp256k1_scalar_set_b32(&s_privkey, &(privkeys[32 * i]), NULL);
+        
+        secp256k1_ecmult_gen(&ctx->ecmult_gen_ctx, &(scr2->gej[i]), &s_privkey);
+        
+        scr2->fe_in[out_keys] = scr2->gej[i].z;
+        
+        out_keys++;
+        
+    }
+    
+    if ( out_keys > 0 ) {
+        /* Invert all Jacobian public keys' Z values in one go. */
+        secp256k1_fe_inv_all_var(scr2->fe_out, scr2->fe_in, out_keys);
+    }
+    out_keys = 0;
+    
+    for ( i = 0; i < key_count2; i++) {
+        secp256k1_ge_set_gej_zinv(&ge_pubkey, &(scr2->gej[i]), &(scr2->fe_out[out_keys]));
+
+        /* Serialize the public key into the requested format. 0 uncom*/
+        secp256k1_eckey_pubkey_serialize(&ge_pubkey, &(pubkeys[pubkey_size * i]), &dummy, 0);
+        out_keys++;
+    }
+    return 1;
+}
 #ifdef ENABLE_MODULE_ECDH
 # include "modules/ecdh/main_impl.h"
 #endif
