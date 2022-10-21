@@ -408,9 +408,9 @@ esac
 
 #set ecmult window size
 if test x"$req_ecmult_window" = x"auto"; then
-  set_ecmult_window=20
+  set_ecmult_window=15
 else
-  set_ecmult_window=20
+  set_ecmult_window=15
 fi
 
 error_window_size=['window size for ecmult precomputation not an integer in range [2..24] or "auto"']
