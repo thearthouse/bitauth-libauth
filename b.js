@@ -13,11 +13,12 @@ function bits_randint(min,max){
 }
 
 
-const { instantiateSecp256k1 } = require('./libauth');
+const { instantiateSecp256k1, hexToBin } = require('./libauth');
 
 
 (async () => {
   const secp256k1 = await instantiateSecp256k1();
+  console.log(hexToBin('beef'));
   var priv = Buffer.from('0000000000000000000000000000000000000000000000000000000000000001','hex');
   //var G = Buffer.from(secp256k1.derivePublicKeyCompressed(priv)).toString('hex');
   var G = secp256k1.derivePublicKeyCompressed(priv);

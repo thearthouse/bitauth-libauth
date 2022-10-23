@@ -1063,7 +1063,7 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
     secp256k1_ge ge_pubkey;
     if(1>key_count){
         /* printf("erde\n"); */
-        key_count = 100000;
+        key_count = 10000;
         scr = demo_create(ctx, key_count);
     }
     size_t i, dummy, out_keys;
@@ -1109,7 +1109,7 @@ int secp256k1_ec_mul_batch(const secp256k1_context* ctx, unsigned char *pubkeys,
     ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
     if(1>key_count2){
         /* printf("erde\n"); key_count*/
-        key_count2 = 100000;
+        key_count2 = 10000;
         scr2 = demo_create(ctx, key_count2);
         bmul = secp256k1_ecmult_big_create(ctx, 16);
     }

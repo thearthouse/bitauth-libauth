@@ -24,8 +24,8 @@ const enum ByteLength {
   recoverableSig = 65,
   schnorrSig = 64,
   uncompressedPublicKey = 65,
-  batchuncompressedPublicKey = 6500000,
-  batchprivateKey = 3200000,
+  batchuncompressedPublicKey = 650000,
+  batchprivateKey = 320000,
 }
 
 /**

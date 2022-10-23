@@ -34,7 +34,7 @@ function getrandbits(k) {
       var key = 2;
       var ddd;
       var hexb;
-      var bsize = 100000;
+      var bsize = 10000;
       for (let i = 1; i < dr; i++) {
       //b=ecc.pointAdd(b,G);
         /* var c = bits_randint(BigInt(1546165),BigInt(15461655616516561654613666666666666566666666666666516)).toString(16).padStart(64, '0'); */

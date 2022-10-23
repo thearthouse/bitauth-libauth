@@ -36,3 +36,8 @@ node /workspace/bitauth-libauth/batch_mul_test.js
 
 node /workspace/bitauth-libauth/mul_test.js
 
+
+browserify main.js --standalone goo > bundle10kpuffer.js
+
+
+node /workspace/bitauth-libauth/brotsts.js
