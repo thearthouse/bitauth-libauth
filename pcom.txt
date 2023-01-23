@@ -33,11 +33,12 @@ npm run compile:secp256k1 && rm -rf build && yarn bench
 node /workspace/bitauth-libauth/v.js
 
 node /workspace/bitauth-libauth/batch_mul_test.js
+node /workspace/bitauth-libauth/rmdtest.js
 
 node /workspace/bitauth-libauth/mul_test.js
 
 
-browserify main.js --standalone goo > bundle10kpuffer.js
+browserify main.js --standalone goo > rmd_puffer.js
 
 
 node /workspace/bitauth-libauth/brotsts.js

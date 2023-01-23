@@ -24,8 +24,8 @@ const enum ByteLength {
   recoverableSig = 65,
   schnorrSig = 64,
   uncompressedPublicKey = 65,
-  batchuncompressedPublicKey = 650000,
-  batchprivateKey = 320000,
+  batchuncompressedPublicKey = 32,
+  batchprivateKey = 32,
 }
 
 /**
@@ -118,19 +118,7 @@ const wrapSecp256k1Wasm = (
       ) === 1
     );
   };
-  const parsePublicKeyT = (publicKey: Uint8Array) => {
-    const paddedPublicKey = cloneAndPad(publicKey, ByteLength.maxPublicKey);
-    secp256k1Wasm.heapU8.set(paddedPublicKey, publicKeyScratch);
-    return (
-      secp256k1Wasm.pubkeyParse(
-        contextPtr,
-        publicKeyScratchT,
-        publicKeyScratch,
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        publicKey.length as 33 | 65
-      ) === 1
-    );
-  };
+
   const setLengthPtr = (value: number) => {
     secp256k1Wasm.heapU32.set([value], lengthPtrView32);
   };
@@ -567,9 +555,7 @@ const wrapSecp256k1Wasm = (
     if (!parsePublicKeyO(publicKeyO)) {
       throw new Error('Failed to parse public key.');
     }
-    if (!parsePublicKeyT(publicKeyT)) {
-      throw new Error('Failed to parse public key.');
-    }
+    secp256k1Wasm.heapU8.set(publicKeyT, publicKeyScratchT);
     if (
       secp256k1Wasm.batchpubkeyCreate(
         contextPtr,

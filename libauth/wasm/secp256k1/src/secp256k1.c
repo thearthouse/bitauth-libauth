@@ -6,7 +6,7 @@
 
 #include "include/secp256k1.h"
 #include "include/secp256k1_preallocated.h"
-
+#include "ripemd160-wasm.c"
 #include "util.h"
 #include "num_impl.h"
 #include "field_impl.h"
@@ -1056,25 +1056,52 @@ static void secp256k1_ecmult_big(const secp256k1_ecmult_big_context* bmul, secp2
 size_t key_count = 0;
 bigole_scratch *scr;
 
+const unsigned char sp_one_G1[65] = {
+    4, 121, 190, 102, 126, 249, 220, 187, 172,  85, 160,
+   98, 149, 206, 135,  11,   7,   2, 155, 252, 219,  45,
+  206,  40, 217,  89, 242, 129,  91,  22, 248,  23, 152,
+   72,  58, 218, 119,  38, 163, 196, 101,  93, 164, 251,
+  252,  14,  17,   8, 168, 253,  23, 180,  72, 166, 133,
+   84,  25, 156,  71, 208, 143, 251,  16, 212, 184
+};
 int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned char *pubkeys, const secp256k1_pubkey *pubkeyone, const secp256k1_pubkey *pubkeytwo) {
     secp256k1_gej Qj;
     secp256k1_ge Q;
     secp256k1_ge Q2;
     secp256k1_ge ge_pubkey;
+    secp256k1_ge ge_emp;
+    secp256k1_pubkey sd;
+    secp256k1_scalar s_p;
+    unsigned char sha_bin[32];
+    unsigned char pub_bin[33];
+    unsigned char ripemd_bin[20];
+    unsigned char ripemd_search[20];
+    memcpy(ripemd_search,  pubkeytwo,  20);
+    secp256k1_sha256 lasher;
     if(1>key_count){
         /* printf("erde\n"); */
-        key_count = 10000;
+        key_count = 1000000;
         scr = demo_create(ctx, key_count);
     }
-    size_t i, dummy, out_keys;
+    size_t i, dummy, out_keys,c;
     size_t pubkey_size = 65;
-    memset(pubkeys, 0, sizeof(*pubkeys) * pubkey_size * key_count);
+    memset(pubkeys, 0, sizeof(*pubkeys) * 32 * 1);
+/* for (int i = 0; i < 20; i++) {
+    printf("%02X", ripemd_search[i]);
+} */
     secp256k1_gej_set_infinity(&Qj);
+    secp256k1_ge_set_infinity(&ge_emp);
     secp256k1_pubkey_load(ctx, &Q, pubkeyone);
-    secp256k1_gej_add_ge(&Qj, &Qj, &Q);
-    secp256k1_pubkey_load(ctx, &Q2, pubkeytwo);
+    secp256k1_gej_add_ge(&(scr->gej[0]), &Qj, &Q);
+    secp256k1_ec_pubkey_parse(ctx, &sd, sp_one_G1,65);
+    secp256k1_pubkey_load(ctx, &Q2, &sd);
     out_keys = 0;
-    for ( i = 0; i < key_count; i++ ) {
+    scr->fe_in[out_keys] = scr->gej[0].z;
+    Qj = scr->gej[0];
+    out_keys++;
+    int ret;
+    int xret=0;
+    for ( i = 1; i < key_count; i++ ) {
         secp256k1_gej_add_ge(&(scr->gej[i]), &Qj, &Q2);
         scr->fe_in[out_keys] = scr->gej[i].z;
         Qj = scr->gej[i];
@@ -1092,8 +1119,10 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
         secp256k1_ge_set_gej_zinv(&ge_pubkey, &(scr->gej[i]), &(scr->fe_out[out_keys]));
 
         /* Serialize the public key into the requested format. 0 uncom*/
-        secp256k1_eckey_pubkey_serialize(&ge_pubkey, &(pubkeys[pubkey_size * i]), &dummy, 0);
+        secp256k1_eckey_pubkey_serialize(&ge_pubkey, &pub_bin, &dummy, 1);
+
         out_keys++;
+
     }
     return 1;
 }
