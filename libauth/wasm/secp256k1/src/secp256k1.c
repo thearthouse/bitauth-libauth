@@ -1120,7 +1120,19 @@ int secp256k1_ec_pubkey_pub_add_batch(const secp256k1_context* ctx, unsigned cha
 
         /* Serialize the public key into the requested format. 0 uncom*/
         secp256k1_eckey_pubkey_serialize(&ge_pubkey, &pub_bin, &dummy, 1);
-
+        /* SHA256(pub_bin, 33, &sha_bin); */
+        secp256k1_sha256_initialize(&lasher);
+        secp256k1_sha256_write(&lasher, (unsigned char*)pub_bin, 33);
+        secp256k1_sha256_finalize(&lasher, sha_bin);
+        /* ripemd160(sha_bin, 32, &(pubkeys[20 * i])); */
+        ripemd160(sha_bin, 32, ripemd_bin);
+        ret = memcmp(ripemd_bin, ripemd_search, 20);
+        xret++;
+        if(ret == 0){
+            secp256k1_scalar_set_int(&s_p, xret);
+            secp256k1_scalar_get_b32(pubkeys, &s_p);
+            /* memcpy(pubkeys, &xret, sizeof xret); */
+        }
         out_keys++;
 
     }
